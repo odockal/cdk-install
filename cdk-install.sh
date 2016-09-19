@@ -4,15 +4,18 @@
 
 # TODO:
 # Add support for Cygwin
-# Add support for libvirt box (instead of virtualbox)
+# Command line switching of provider
 
 CDK_BASE_URL=http://cdk-builds.usersys.redhat.com/builds
+PROVIDER=virtualbox
+# Optionally, change the default to libvirt. Can be overriden using on CLI
+#PROVIDER=libvirt
 
 function usage {
-	echo "Usage: $0 latest" '[nightly|weekly]'
-  echo "             Uses latest nightly by default"
-  echo "       $0 use build_dir_url"
-  echo "             Uses cdk.zip and virtualbox vagrant box found at build_dir_url"
+	echo "Usage: $0 [-libvirt] latest" '[nightly|weekly]'
+  echo "             Uses latest nightly (virtualbox) by default"
+  echo "       $0 [-libvirt] use build_dir_url"
+  echo "             Uses cdk.zip and virtualbox (or libvirt) vagrant box found at build_dir_url"
   exit 1
 }
 
@@ -22,40 +25,47 @@ then
   usage
 fi
 
-
-case $1 in
-  latest)
-    shift
-    if [ $# == 0 ]
-    then
-      LATEST=1
-      TYPE=nightly
-    elif [ $# == 1 -a $1 == nightly ]
-    then
-      LATEST=1
-      TYPE=nightly
-    elif [ $# == 1 ] && [ $1 == weekly ]
-    then
-      LATEST=1
-      TYPE=weekly
-    else
-      usage
-    fi
-    ;;
-  use)
-    shift
-    if [ $# == 1 ]
-    then
-      LATEST=0
-      CDK_URL=${1%%/}
-    else
-      usage
-    fi
-    ;;
-  *)
-    usage
-    ;;
-esac
+while [ $# -gt 0 ]
+do
+	case $1 in
+		-libvirt)
+			shift
+			PROVIDER=libvirt
+			;;
+	  latest)
+	    shift
+	    if [ $# == 0 ]
+	    then
+	      LATEST=1
+	      TYPE=nightly
+	    elif [ $# == 1 -a $1 == nightly ]
+	    then
+	      LATEST=1
+	      TYPE=nightly
+	    elif [ $# == 1 ] && [ $1 == weekly ]
+	    then
+	      LATEST=1
+	      TYPE=weekly
+	    else
+	      usage
+	    fi
+	    ;;
+	  use)
+	    shift
+	    if [ $# == 1 ]
+	    then
+	      LATEST=0
+	      CDK_URL=${1%%/}
+	    else
+	      usage
+	    fi
+	    ;;
+	  *)
+	    usage
+	    ;;
+	esac
+	shift
+done
 
 # For latest, we need to find the actual directory (based on date)
 # so that we can match against what we already have on the disk
@@ -91,8 +101,8 @@ else
   curl -s $CDK_URL/cdk.zip -o $TARGET_DIR/cdk.zip
 fi
 
-# Check if virtualbox vagrant box exists locally and is correct. If not, download it.
-BOX_FILE=`echo ${TARGET_DIR}/*virtualbox.box.sha256sum`
+# Check if virtualbox/libvirt vagrant box exists locally and is correct. If not, download it.
+BOX_FILE=`echo ${TARGET_DIR}/*${PROVIDER}.box.sha256sum`
 BOX_FILE=${BOX_FILE##*/}
 BOX_FILE=${BOX_FILE%%.sha256sum}
 echo "Box file: $BOX_FILE"
