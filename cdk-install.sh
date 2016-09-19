@@ -133,14 +133,14 @@ fi
 unzip -o $TARGET_DIR/cdk.zip -d $TARGET_DIR
 
 # Destroy previous vagrant env (vagrant destroy)
-if [ `vagrant global-status|grep 'cdk/components'|wc -l` == 0 ]
+if [ `vagrant global-status|grep 'components/rhel'|wc -l` == 0 ]
 then
   echo "No vagrant env to be destroyed. Moving on."
-elif [ `vagrant global-status|grep 'cdk/components'|wc -l` == 1 ]
+elif [ `vagrant global-status|grep 'components/rhel'|wc -l` == 1 ]
 then
   echo "Destroying vagrant env:"
   vagrant global-status|grep 'cdk/components'
-  vagrant destroy `vagrant global-status |grep 'cdk/components'|cut -f 1 -d ' '`
+  vagrant destroy `vagrant global-status |grep 'components/rhel'|cut -f 1 -d ' '`
 else
   echo "Cannot determine vagrant env to be destroyed. Enter the ID to be destroyed:"
   vagrant global-status
