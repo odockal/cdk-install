@@ -4,7 +4,6 @@
 
 # TODO:
 # Add support for Cygwin
-# Command line switching of provider
 
 CDK_BASE_URL=http://cdk-builds.usersys.redhat.com/builds
 PROVIDER=virtualbox
