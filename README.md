@@ -9,6 +9,7 @@ This script is aimed at developers wishing to easily keep their cdk installation
 * vagrant
 * wget
 * curl
+* unzip
 
 ## Usage
 
