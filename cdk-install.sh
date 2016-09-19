@@ -29,7 +29,6 @@ while [ $# -gt 0 ]
 do
 	case $1 in
 		-libvirt)
-			shift
 			PROVIDER=libvirt
 			;;
 	  latest)
