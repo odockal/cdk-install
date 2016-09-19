@@ -22,5 +22,5 @@ Same as above.
     $ cdk-install.sh latest weekly
 Same as above, but install latest weekly instead of nightly.
 
-    $ cdk-install.sh use <cdk_build_url>
+    $ cdk-install.sh use http://cdk-builds.url/builds/weekly/15-Sep-2016.rc5
 Use a specific build.
