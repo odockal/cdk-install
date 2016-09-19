@@ -8,7 +8,6 @@ This script is aimed at developers wishing to easily keep their cdk installation
 * previous working installation of CDK - this is not strictly needed, but the script will not do anything outside of the things needed to change from one cdk install to another, e.g. it will not modify your /etc/groups which is apparently required on Linux
 * vagrant
 * wget
-* curl
 * unzip
 
 ## Usage

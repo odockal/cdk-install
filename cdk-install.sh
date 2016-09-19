@@ -71,7 +71,7 @@ if [ $LATEST == 1 ]
 then
   # We use a trick to find which actual build is the latest
   # - the sha sum will show the original folder name
-  TARGET_DIR=`curl -s $CDK_BASE_URL/$TYPE/latest-build/cdk.zip.sha256sum|sed 's%.*/\([^/]*\)/cdk.zip%\1%'`
+  TARGET_DIR=`wget -qO- $CDK_BASE_URL/$TYPE/latest-build/cdk.zip.sha256sum|sed 's%.*/\([^/]*\)/cdk.zip%\1%'`
   CDK_URL=$CDK_BASE_URL/$TYPE/$TARGET_DIR
   #wget -r --no-parent --accept *sha256sum -nH --cut-dirs=2 $CDK_BASE_URL/$TYPE/latest-build/
 else
@@ -96,7 +96,7 @@ then
   echo "cdk.zip exists and sha256 matches. Download skipped."
 else
   echo "Downloading cdk.zip"
-  curl -s $CDK_URL/cdk.zip -o $TARGET_DIR/cdk.zip
+  wget -q -P $TARGET_DIR $CDK_URL/cdk.zip
 fi
 
 # Check if virtualbox/libvirt vagrant box exists locally and is correct. If not, download it.
@@ -109,7 +109,7 @@ then
   echo "Box file exists and sha256 matches. Download skipped."
 else
   echo "Downloading box"
-  curl $CDK_URL/$BOX_FILE -o $TARGET_DIR/$BOX_FILE
+  wget -q -P $TARGET_DIR $CDK_URL/$BOX_FILE
 fi
 
 # Specific settings for different platforms
