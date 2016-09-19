@@ -19,6 +19,9 @@ It will reuse the files if you try to install the same version again.
     $ cdk-install.sh latest nightly
 Same as above.
 
+    $ cdk-install.sh -libvirt latest
+Use libvirt instead of virtualbox.
+
     $ cdk-install.sh latest weekly
 Same as above, but install latest weekly instead of nightly.
 
