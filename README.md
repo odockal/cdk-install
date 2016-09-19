@@ -27,3 +27,9 @@ Same as above, but install latest weekly instead of nightly.
 
     $ cdk-install.sh use http://cdk-builds.url/builds/weekly/15-Sep-2016.rc5
 Use a specific build.
+
+## Known issues
+
+vagrant destroy will fail if you have your Eclipse open and docker tooling connected to your cdk's docker daemon at least once.
+The problem is that docker tooling locks the cert files and won't release them.
+See [JBIDE-23123](https://issues.jboss.org/browse/JBIDE-23123)
