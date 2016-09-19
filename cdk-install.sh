@@ -149,7 +149,7 @@ else
 fi
 
 # Remove cdkv2 box
-vagrant box remove cdkv2
+vagrant box remove cdkv2 --provider=$PROVIDER
 
 # Uninstall vagrant plugins
 vagrant plugin uninstall vagrant-registration vagrant-service-manager vagrant-sshfs
@@ -165,7 +165,7 @@ do
 done
 
 # Add vagrant box
-vagrant box add cdkv2 $TARGET_DIR/$BOX_FILE
+vagrant box add cdkv2 $TARGET_DIR/$BOX_FILE --provider=$PROVIDER
 
 echo "Done. Standard rhel-ose dir is here:"
 find $TARGET_DIR -name rhel-ose
