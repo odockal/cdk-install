@@ -96,6 +96,10 @@ then
   echo "cdk.zip exists and sha256 matches. Download skipped."
 else
   echo "Downloading cdk.zip"
+	if [ -f $TARGET_DIR/cdk.zip ]
+	then
+		rm $TARGET_DIR/cdk.zip
+	fi
   wget -q -P $TARGET_DIR $CDK_URL/cdk.zip
 fi
 
@@ -109,6 +113,10 @@ then
   echo "Box file exists and sha256 matches. Download skipped."
 else
   echo "Downloading box"
+	if [ -f $TARGET_DIR/$BOX_FILE ]
+	then
+		rm $TARGET_DIR/$BOX_FILE
+	fi
   wget -P $TARGET_DIR $CDK_URL/$BOX_FILE
 fi
 
