@@ -2,12 +2,9 @@
 # Script for setting up CDK environment
 # Currently tested to work on Mac, but should work on Linux also
 
-# TODO:
-# Add support for Cygwin
-
 CDK_BASE_URL=http://cdk-builds.usersys.redhat.com/builds
 PROVIDER=virtualbox
-# Optionally, change the default to libvirt. Can be overriden using on CLI
+# Optionally, change the default to libvirt. Can be overriden on CLI
 #PROVIDER=libvirt
 
 function usage {
