@@ -10,6 +10,12 @@ This script is aimed at developers wishing to easily keep their cdk installation
 * wget
 * unzip
 
+### Operating systems
+* Linux and Mac - works OK
+* Windows
+  - works in cygwin
+  - make sure to have autocrlf disabled when checking out: `$ git config core.autocrlf false`
+
 ## Usage
 
     $ cdk-install.sh latest
