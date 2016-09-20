@@ -109,7 +109,7 @@ then
   echo "Box file exists and sha256 matches. Download skipped."
 else
   echo "Downloading box"
-  wget -q -P $TARGET_DIR $CDK_URL/$BOX_FILE
+  wget -P $TARGET_DIR $CDK_URL/$BOX_FILE
 fi
 
 # Specific settings for different platforms
