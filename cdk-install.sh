@@ -167,10 +167,7 @@ then
 fi
 
 # Install vagrant plugins
-for PLUGIN in $TARGET_DIR/cdk/plugins/*.gem
-do
-  vagrant plugin install $PLUGIN
-done
+find $TARGET_DIR/cdk/plugins -name '*.gem' -exec vagrant plugin install {} \;
 
 # Add vagrant box
 vagrant box add cdkv2 $TARGET_DIR/$BOX_FILE --provider=$PROVIDER
