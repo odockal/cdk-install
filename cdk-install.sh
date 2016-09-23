@@ -6,6 +6,7 @@ CDK_BASE_URL=http://cdk-builds.usersys.redhat.com/builds
 PROVIDER=virtualbox
 # Optionally, change the default to libvirt. Can be overriden on CLI
 #PROVIDER=libvirt
+UNAME=`uname`
 
 function usage {
 	echo "Usage: $0 [-libvirt] latest" '[nightly|weekly]'
@@ -87,8 +88,14 @@ then
   exit 1
 fi
 
+if [[ $UNAME == CYGWIN* ]] # On Windows we need to use certutil
+then
+	CDKSUM=`( cd $TARGET_DIR; certutil -hashfile cdk.zip SHA256 ) | head -2|tail -1|tr -d " \r"`
+else
+	CDKSUM=`shasum -a 256 $TARGET_DIR/cdk.zip|cut -d ' ' -f 1`
+fi
 # Check if cdk.zip exists locally and is correct. If not, download it.
-if [ -f $TARGET_DIR/cdk.zip ] && [ `shasum -a 256 $TARGET_DIR/cdk.zip|cut -d ' ' -f 1` == `cat $TARGET_DIR/cdk.zip.sha256sum|cut -d ' ' -f 1` ]
+if [ -f $TARGET_DIR/cdk.zip ] && [ $CDKSUM == `cat $TARGET_DIR/cdk.zip.sha256sum|cut -d ' ' -f 1` ]
 then
   echo "cdk.zip exists and sha256 matches. Download skipped."
 else
@@ -105,7 +112,13 @@ BOX_FILE=`echo ${TARGET_DIR}/*${PROVIDER}.box.sha256sum`
 BOX_FILE=${BOX_FILE##*/}
 BOX_FILE=${BOX_FILE%%.sha256sum}
 echo "Box file: $BOX_FILE"
-if [ -f $TARGET_DIR/$BOX_FILE ] && [ `shasum -a 256 $TARGET_DIR/$BOX_FILE|cut -d ' ' -f 1` == `cat $TARGET_DIR/${BOX_FILE}.sha256sum|cut -d ' ' -f 1` ]
+if [[ $UNAME == CYGWIN* ]] # On Windows we need to use certutil
+then
+	BOXSUM=`( cd $TARGET_DIR; certutil -hashfile $BOX_FILE SHA256 ) | head -2|tail -1|tr -d " \r"`
+else
+	BOXSUM=`shasum -a 256 $TARGET_DIR/$BOX_FILE|cut -d ' ' -f 1`
+fi
+if [ -f $TARGET_DIR/$BOX_FILE ] && [ $BOXSUM == `cat $TARGET_DIR/${BOX_FILE}.sha256sum|cut -d ' ' -f 1` ]
 then
   echo "Box file exists and sha256 matches. Download skipped."
 else
