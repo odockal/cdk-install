@@ -88,11 +88,15 @@ then
   exit 1
 fi
 
-if [[ $UNAME == CYGWIN* ]] # On Windows we need to use certutil
+# On Windows we need to use certutil and absolute path to find
+#  - we don't want to end up using Windows find if it's prefed in the PATH
+if [[ $UNAME == CYGWIN* ]] 
 then
 	CDKSUM=`( cd $TARGET_DIR; certutil -hashfile cdk.zip SHA256 ) | head -2|tail -1|tr -d " \r"`
+	FIND=/usr/bin/find
 else
 	CDKSUM=`shasum -a 256 $TARGET_DIR/cdk.zip|cut -d ' ' -f 1`
+	FIND=find
 fi
 # Check if cdk.zip exists locally and is correct. If not, download it.
 if [ -f $TARGET_DIR/cdk.zip ] && [ $CDKSUM == `cat $TARGET_DIR/cdk.zip.sha256sum|cut -d ' ' -f 1` ]
@@ -158,7 +162,7 @@ elif [ `vagrant global-status|grep 'components/rhel'|wc -l` == 1 ]
 then
   echo "Destroying vagrant env:"
   vagrant global-status|grep 'cdk/components'
-  vagrant destroy `vagrant global-status |grep 'components/rhel'|cut -f 1 -d ' '`
+  vagrant destroy -f `vagrant global-status |grep 'components/rhel'|cut -f 1 -d ' '`
 else
   echo "Cannot determine vagrant env to be destroyed. Enter the ID to be destroyed:"
   vagrant global-status
@@ -177,10 +181,17 @@ then
 fi
 
 # Install vagrant plugins
-find $TARGET_DIR/cdk/plugins -name '*.gem' -exec vagrant plugin install {} \;
+$FIND $TARGET_DIR/cdk/plugins -name '*.gem' -exec vagrant plugin install {} \;
 
 # Add vagrant box
 vagrant box add cdkv2 $TARGET_DIR/$BOX_FILE --provider=$PROVIDER
 
 echo "Done. Standard rhel-ose dir is here:"
-find $TARGET_DIR -name rhel-ose
+$FIND $TARGET_DIR -name rhel-ose
+
+# Create a symlink for $TARGET_DIR
+if [ -e latest-install ]
+then
+	rm latest-install # ln parameters for different platforms vary, so this is easier
+fi
+ln -s $TARGET_DIR latest-install
