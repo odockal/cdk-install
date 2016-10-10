@@ -195,3 +195,7 @@ then
 	rm latest-install # ln parameters for different platforms vary, so this is easier
 fi
 ln -s $TARGET_DIR latest-install
+
+# To be able to use installation path outside this script
+echo "Exporting env. variable INSTALLATION_DIR to be set as value of $TARGET_DIR"
+export INSTALLATION_DIR=$TARGET_DIR
