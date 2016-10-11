@@ -161,7 +161,7 @@ then
 elif [ `vagrant global-status|grep 'components/rhel'|wc -l` == 1 ]
 then
   echo "Destroying vagrant env:"
-  vagrant global-status|grep 'cdk/components'
+  vagrant global-status|grep 'components/rhel'
   vagrant destroy -f `vagrant global-status |grep 'components/rhel'|cut -f 1 -d ' '`
 else
   echo "Cannot determine vagrant env to be destroyed. Enter the ID to be destroyed:"
